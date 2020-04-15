@@ -22,7 +22,7 @@ namespace OOP_Assignment_2_Code_Review
                 {
                     Console.Write(">: [Input] ");
                     files = Console.ReadLine().Split();
-                    if (files[0].ToLower() == "dif")
+                    if (files[0].ToLower() == "diff" && files.Length == 3)
                     {
                         FirstFile = new List<string>(File.ReadAllLines(files[1].ToString()));
                         SecondFile = new List<string>(File.ReadAllLines(files[2].ToString()));
@@ -30,7 +30,10 @@ namespace OOP_Assignment_2_Code_Review
                     }
                     else
                     {
-                        Console.WriteLine("You have not used the dif command");
+                        if (files.Length != 3)
+                            Console.WriteLine("Please Only Enter 2 Files");
+                        else
+                            Console.WriteLine("You Have Not Used The Diff Command");
                     }
                 }
                 catch(Exception e)
@@ -41,25 +44,30 @@ namespace OOP_Assignment_2_Code_Review
             //instantiations of Txt_File class
             Txt_File First = new Txt_File(FirstFile);
             Txt_File Second = new Txt_File(SecondFile);
-            List<(string, int)> SecList = Second.Get_List(), FirList = First.Get_List();
 
             // Code that verifies that the two files are the same
-            Console.Write($">: [Output] {files[1]} and {files[2]} are ");
+            Console.Write($">: [Output] ");
             try
             {
-                for (int i = 0; i < SecList.Count(); i++)
+                for (int i = 0; i < Second.Compressed.Count()-1; i++)
                 {
 
-                    if (SecList[i] != FirList[i])
+                    if (Second.Compressed[i] != First.Compressed[i])
                     {
-                        Console.WriteLine(i);
                         failed = true;
-                        break;
+                        Console.Write($"{files[1]} and {files[2]} are different");
+                        FindThing(First.Compressed[i],Second.Compressed[i], i);
+                    }
+                    else
+                    {
+                        Second.Compressed[i] = (Second.Compressed[i].Item1, Second.Compressed[i].Item2 - 1);
+                        First.Compressed[i] = (First.Compressed[i].Item1, First.Compressed[i].Item2 - 1);
                     }
                 }
                 if (!failed)
                 {
-                    Console.Write("not different");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($"{files[1]} and {files[2]} are not different");
                 }
             }
             catch (Exception e)
@@ -68,6 +76,11 @@ namespace OOP_Assignment_2_Code_Review
             }
         }
 
+        public static void FindThing((string,int) First, (string,int) Second, int indexOfValues)
+        {
+            
+        }
 
     }
+
 }
