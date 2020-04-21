@@ -9,24 +9,26 @@ namespace OOP_Assignment_2_Code_Review
 {
     class Txt_File
     {
-        public List<string> file;
-        public List<(string, int)> Compressed;
-        List<int> Map = new List<int>();
+        //Variables the contain the list of words and the map they correlate too
+        //as well as the number of lines in the file.
+        public List<string> Compressed = new List<string>();
+        public List<int> Map = new List<int>();
+        public int Lines;
 
 
-
+        // Constructor used to Compress thee text file when said file ist instantiated as an object
         public Txt_File(List<string> f)
         {
-            file = f;
-            Compressed = Compress();
+            Compressed = Compress(f);
+
         }
 
-        //Method Name: Get_List
+        //Method Name: Compress
         //Return: List<(string,int)>
-        //Puporse: to compress the file using a lossless form of text compression
-        private List<(string, int)> Compress()
+        //Puporse: tCompresses the file into a map and list this allows for easy and quick method tetsing if the files are the same
+        private List<string> Compress(List<string> file)
         {
-            Dictionary<string, int> compressedFile = new Dictionary<string, int>();
+            List<string> compressedFile = new List<string>();
 
             foreach (string paragraphs in file)
             {
@@ -34,32 +36,47 @@ namespace OOP_Assignment_2_Code_Review
                 
                 foreach(string word in words)
                 {
-                    if (compressedFile.ContainsKey(word))
-                        compressedFile[word] += 1;
-
-                    else
-                        compressedFile.Add(word, 1);
-
-                    Map.Add(compressedFile.Keys.ToList().IndexOf(word));
+                    if (!(compressedFile.Contains(word)))
+                        compressedFile.Add(word);
+                    Map.Add(compressedFile.IndexOf(word));
 
                 }
+                if (!(compressedFile.Contains("NewLine")))
+                    compressedFile.Add("NewLine");
+                Lines++;
+                Map.Add(compressedFile.IndexOf("NewLine"));
                
             }
-            List<(string, int)> CompressedList = compressedFile.Select(x => (x.Key,x.Value)).ToList();
-
-            return CompressedList;
+            return compressedFile;
         }
-        public void Reproduce()
+
+        //Method Name:ReproduceSection
+        //Return: List<string>
+        //Purpose: to decompress a snippet of the file so that it can be displayed to the user.
+        public List<string> ReproduceSection(int CentrePosition)
         {
-            bool finished = true;
-            int count = 0;
-            while (finished)
-            {
-                Console.Write($" {Compressed[Map[count]].Item1}");
-                count++;
 
+            int cap = CentrePosition + 2;
+            List<string> section = new List<string>();
+            for (int count = CentrePosition - 3; count <= cap; count++)
+            {
+                if(Compressed[Map[count]]== "NewLine")
+                {
+                    if (count > CentrePosition)
+                        break;
+                    else
+                    {
+                        section.RemoveRange(0, section.IndexOf(section.Last()) - 1);
+                    }
+                }
+                else
+                    section.Add(Compressed[Map[count]]);
             }
+
+            return section;
         }
+        
+        
 
 
     }
