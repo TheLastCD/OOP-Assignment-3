@@ -75,10 +75,7 @@ namespace OOP_Assignment_2_Code_Review
 
             return section;
         }
-        public void Remove(bool positive, int index)
-        {
 
-        }
         
         
 
