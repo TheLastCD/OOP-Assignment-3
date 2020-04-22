@@ -75,10 +75,12 @@ namespace OOP_Assignment_2_Code_Review
                     if (!failed)
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write($"{files[1]} and {files[2]} are not different");
+                        Console.Write($"{files[1]} and {files[2]} are not different\n");
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                     else
                         SaveLogFile(log);
+                    Console.WriteLine("\n");
                 }
                 catch (Exception e)
                 {
